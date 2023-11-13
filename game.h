@@ -8,68 +8,78 @@
 
 struct TileMap
 {
-    uint32 *tiles;
+    U32 *tiles;
 };
 
 struct WorldPos
 {
-    Vec2 tile;
-    Vec2 tile_center_rel;
-    Vec2 tile_map;
+    I32 tile_x;
+    I32 tile_y;
+    
+    I32 tile_map_x;
+    I32 tile_map_y;
+    
+    F32 tile_center_rel_x;
+    F32 tile_center_rel_y;
 };
 
 struct GameWorld
 {
     GameWorld(TileMap *maps, 
-              int32 tile_map_count_x,
-              int32 tile_map_count_y, 
-              int32 tile_count_x, 
-              int32 tile_count_y, 
-              int32 offset_x,
-              int32 offset_y, 
-              real32 tile_dim,
-              real32 tile_side_in_pixels, 
-              real32 tile_side_in_meters);
+              I32 tile_map_count_x,
+              I32 tile_map_count_y, 
+              I32 tile_count_x, 
+              I32 tile_count_y, 
+              I32 offset_x,
+              I32 offset_y, 
+              F32 tile_dim,
+              F32 tile_side_in_pixels, 
+              F32 tile_side_in_meters);
     
-    uint32 getTileValue(TileMap *tile_map, int32 test_tile_x, int32 test_tile_y);
-    bool32 isDoorTile(TileMap *tile_map, int32 test_tile_x, int32 test_tile_y);
-    bool32 isTileEmpty(TileMap *tile_map, int32 test_tile_x, int32 test_tile_y);
-    TileMap *getWorldTileMap(int32 test_tile_map_x, int32 test_tile_map_y); // NOTE(alexey): Return const?
+    U32 getTileValue(TileMap *tile_map, I32 test_tile_x, I32 test_tile_y);
+    Bool32 isDoorTile(TileMap *tile_map, I32 test_tile_x, I32 test_tile_y);
+    Bool32 isTileEmpty(TileMap *tile_map, I32 test_tile_x, I32 test_tile_y);
+    TileMap *getWorldTileMap(I32 test_tile_map_x, I32 test_tile_map_y); // NOTE(alexey): Return const?
     WorldPos recomputeWorldPos(WorldPos world_pos);
-    bool32 isTileMapPointEmpty(WorldPos world_pos);
+    Bool32 isTileMapPointEmpty(WorldPos world_pos);
         
     TileMap *m_maps;
     
-    int32 m_tile_map_count_x;
-    int32 m_tile_map_count_y;
+    I32 m_tile_map_count_x;
+    I32 m_tile_map_count_y;
     
-    int32 m_tile_count_x;
-    int32 m_tile_count_y;
+    I32 m_tile_count_x;
+    I32 m_tile_count_y;
     
-    int32 m_offset_x;
-    int32 m_offset_y;
+    I32 m_offset_x;
+    I32 m_offset_y;
     
-    real32 m_tile_dim;
-    real32 m_tile_half_dim;
+    F32 m_tile_dim;
+    F32 m_tile_half_dim;
     
-    real32 m_tile_side_in_pixels;
-    real32 m_tile_side_in_meters;
-    real32 m_half_tile_side_in_meters;
+    F32 m_tile_side_in_pixels;
+    F32 m_tile_side_in_meters;
+    F32 m_half_tile_side_in_meters;
     
-    real32 m_pixels_per_meter;
+    F32 m_pixels_per_meter;
     
     // NOTE(alexey): The lower 8 bits correspond where in the chunk we are.
     // If chunk for example, 256x256, that will give us the exact tile of where we are in the chunk.
     // The remaining 24 bits corresponds to where we are in our world.
     // (not initialized);
-    uint32 m_tile_x;
-    uint32 m_tile_y;
+    U32 m_tile_x;
+    U32 m_tile_y;
 };
 
 function GameWorld makeGameWorld(TileMap* tile_maps);
 
 struct GameState
 {
+    GameState(GameWorld* world)
+        : m_world(world)
+    {
+    }
+    
     // TODO(alexey): When we create a game state, we should initialize a game world as well!
     // Allocate memory for the tile maps etc.
     void update(Input *input/*...*/);
@@ -80,11 +90,12 @@ struct GameState
     // and all the rendering code into render() function.
     // Maybe the input has to be a part of game state as well?
     
-    GameWorld world;
-    WorldPos world_pos;
-    Vec2 player_dim;
-    real32 player_speed_in_meters;
-    bool32 is_initialized;
+    GameWorld *m_world;
+    WorldPos m_world_pos;
+    Vec2 m_player_dim;
+    F32 m_player_speed_in_meters;
+    
+    Bool32 m_is_initialized;
 };
 
 #define GAME_H

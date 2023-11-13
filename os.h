@@ -22,9 +22,19 @@ typedef uint64_t uint64;
 typedef int32 bool32;
 typedef float real32;
 
+typedef int32 I32;
+typedef uint8 U8;
+typedef uint16 U16;
+typedef uint32 U32;
+typedef uint64 U64;
+typedef real32 F32;
+typedef bool32 Bool32;
+
 #define Gb(n) (uint64)(Mb(n) * (1024ull))
 #define Mb(n) (uint64)(Kb(n) * (1024ull))
 #define Kb(n) (uint64)((n) * (1024ull))
+
+#define Cast(type, value) (type)(value)
 
 function int32 floor_real32_to_int32(real32 value)
 {
@@ -197,20 +207,24 @@ bool32 event_equal(const Event& event, EventType type)
 
 struct Input
 {
+    F32 dt_for_frame;
+    
     int32 keys[256];
     int32 mouse_buttons[5];
     
-    bool32 on_key_pressed(Key key);
-    bool32 on_mouse_button_pressed(MouseButton button);
+    bool32 onKeyPressed(Key key);
+    bool32 onKeyReleased(Key key); // not implemented yet!
+    
+    bool32 onMouseButtonPressed(MouseButton button);
 };
 
-inline bool32 Input::on_key_pressed(Key key)
+inline bool32 Input::onKeyPressed(Key key)
 { 
     assert(key >= 0 && key < 256); 
     return keys[key];
 }
 
-inline bool32 Input::on_mouse_button_pressed(MouseButton button) 
+inline bool32 Input::onMouseButtonPressed(MouseButton button) 
 { 
     assert(button >= 0 && button < 5); 
     return mouse_buttons[button];

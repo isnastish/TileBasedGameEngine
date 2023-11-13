@@ -1,3 +1,17 @@
+// TODO(alexey): 
+// 
+// [ ] Experiment with representing a tile map using unsigned 32-bit integer with an idea
+//     that first 8-bits should be reserved for the location in a chunk.
+//     And the remaining 24bits represent the location of the player in the world.
+//     Could we use four uint32 to represent that data?
+// [ ] Put tile maps into the memory.
+// 
+// [ ] Make a wrapper for the platform layer so it can be reused.
+// 
+// [ ] Implement gamepad input.
+//
+// [ ] Start looking into arenas!
+
 #include "os.h"
 
 #ifdef function
@@ -440,7 +454,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
                    HINSTANCE hPrevInstance,
                    LPSTR cmd_line,
                    int show_code)
-{
+p0{
     // TODO(alexey): Initialize Os at one place, don't spread out the initialization.
     
     uint64 frequency = win32_frequency();
